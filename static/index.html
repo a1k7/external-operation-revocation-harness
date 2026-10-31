@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>External Operation Revocation &amp; Outcome Verification Harness</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <h1>Revocation &amp; Outcome Verification Harness</h1>
+            <p class="subtitle">Locally simulated — not a real payment integration</p>
+        </div>
+        <div class="chain-status" id="chain-status">Ledger: checking…</div>
+    </header>
+
+    <section class="scenarios">
+        <h2>Run demonstration scenarios</h2>
+        <p class="hint">
+            Each scenario creates its own authorization and operation with a unique
+            ID. Results are additive; no state is cleared between runs.
+        </p>
+        <div class="scenario-grid" id="scenario-buttons"></div>
+        <pre class="scenario-result" id="scenario-result">(no scenario run yet)</pre>
+    </section>
+
+    <section class="manual">
+        <h2>Manual flow</h2>
+        <div class="manual-grid">
+            <div class="card">
+                <h3>1. Grant authorization</h3>
+                <label>Agent ID <input id="grant-agent" value="agent-manual" /></label>
+                <label>Resource <input id="grant-resource" value="refund" /></label>
+                <button id="btn-grant">Grant</button>
+                <div class="out" id="grant-out"></div>
+            </div>
+
+            <div class="card">
+                <h3>2. Dispatch operation</h3>
+                <label>Authorization ID <input id="dispatch-auth" /></label>
+                <label>Idempotency key <input id="dispatch-key" value="manual-key-1" /></label>
+                <label>Amount (cents) <input id="dispatch-amount" value="1200" /></label>
+                <label><input type="checkbox" id="dispatch-inconcl" /> force inconclusive</label>
+                <button id="btn-dispatch">Dispatch</button>
+                <div class="out" id="dispatch-out"></div>
+            </div>
+
+            <div class="card">
+                <h3>3. Revoke &amp; cancel</h3>
+                <label>Authorization ID <input id="revoke-auth" /></label>
+                <label>Reason <input id="revoke-reason" value="manual revoke" /></label>
+                <button id="btn-revoke">Revoke</button>
+                <label>Operation UID <input id="cancel-op" /></label>
+                <button id="btn-cancel">Request cancellation</button>
+                <div class="out" id="revoke-out"></div>
+            </div>
+
+            <div class="card">
+                <h3>4. Verify</h3>
+                <label>Operation UID <input id="verify-op" /></label>
+                <button id="btn-advance">Advance simulated time 300s</button>
+                <button id="btn-verify">Verify outcome</button>
+                <div class="out" id="verify-out"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="operations">
+        <h2>Operations</h2>
+        <table id="ops-table">
+            <thead>
+                <tr>
+                    <th>Operation UID</th>
+                    <th>Auth ID</th>
+                    <th>Auth status</th>
+                    <th>Auth v#</th>
+                    <th>Dispatched</th>
+                    <th>Revoked</th>
+                    <th>Cancellation</th>
+                    <th>Receiver</th>
+                    <th>Verified outcome</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section class="evidence">
+        <h2>Evidence event timeline</h2>
+        <div id="evidence-feed" class="feed"></div>
+    </section>
+
+    <footer>
+        <p>
+            This harness simulates an external receiver locally. It is not a
+            production payment integration and does not cancel real payments.
+            Verified outcomes reflect simulated receiver state only.
+        </p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
